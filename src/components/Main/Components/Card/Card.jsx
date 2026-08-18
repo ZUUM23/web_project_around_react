@@ -1,9 +1,13 @@
-import { useState } from "react";
-export default function Card({ card, onOpenPopup }) {
-  const { title, link, isLiked } = card;
+import { Children, useState } from "react";
+
+export default function Card({ card, onOpenPopup, onCardDelete }) {
+  const { title, link, isLiked, id } = card;
   const imageComponent = {
     title: title,
     link: link,
+  };
+  const deleteClick = {
+    id: id,
   };
   return (
     <li className="card">
@@ -17,6 +21,7 @@ export default function Card({ card, onOpenPopup }) {
         aria-label="Delete card"
         className="card__delete-button"
         type="button"
+        onClick={() => onCardDelete(deleteClick)}
       />
       <div className="card__description">
         <h2 className="card__title">{title}</h2>

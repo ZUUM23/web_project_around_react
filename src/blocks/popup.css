@@ -45,8 +45,11 @@
   cursor: pointer;
 }
 
-.popup__close:hover {
+/* .popup__close:hover {
   /* opacity: 0.6; */
+*/ #confirmation__delete .popup__content {
+  max-width: 300px;
+  min-height: 200px;
 }
 
 .popup__content {
@@ -164,7 +167,7 @@
   height: 50px;
   width: 100%;
   font-size: 24px;
-  margin-top: 38px;
+  margin-top: 100px;
   background-color: #000;
   color: bisque;
 }
