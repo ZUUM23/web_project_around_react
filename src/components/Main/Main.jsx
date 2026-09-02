@@ -1,5 +1,6 @@
 import avatarUno from "../../images/avatar.jpg";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
 import Popup from "./Components/Popup/Popup.jsx";
 import NewCard from "./Components/Popup/Form/NewCard/NewCard.jsx";
 import EditProfile from "./Components/Popup/Form/EditProfile/EditProfile.jsx";
@@ -8,28 +9,53 @@ import Card from "./Components/Card/Card.jsx";
 import RemoveCard from "./Components/Popup/Form/RemoveCard/RemoveCard.jsx";
 import ImagePopup from "./Components/ImagePopup/ImagePopup.jsx";
 import lapizEdit from "../../images/edit-icon.svg";
-const cards = [
-  {
-    isLiked: false,
-    _id: "5d1f0611d321eb4bdcd707dd",
-    title: "Yosemite Valley",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:10:57.741Z",
-  },
-  {
-    isLiked: false,
-    _id: "5d1f0611d321eb4bdcd708dd",
-    title: "lago oculto",
-    link: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRizh5bunA_C6igG94PUkOTezwF4ZCC8M2f6uhTakKmq22yueUTmCXRrD2g&s=10",
-    owner: "5d1f0611d321eb4bdcd708dd",
-    createdAt: "2019-07-05T08:10:57.741Z",
-  },
-];
-console.log(cards);
+import Api from "../../Utilis/Api.js";
 
 export default function Main() {
   const [popup, setPopup] = useState(null);
+  const [cards, setCards] = useState([]);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+
+  const api = new Api({
+    baseUrl: "https://around-api.es.tripleten-services.com/v1",
+    headers: {
+      authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
+      "Content-Type": "application/json",
+    },
+  });
+  useEffect(() => {
+    api.getInitialCards().then((data) => {
+      console.log(data, ":datos");
+
+      setCards(data);
+    });
+  }, []);
+
+  async function handleCardLike(card) {
+    const isLiked = card.isLiked;
+    console.log("clic recibido", card);
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        console.log(newCard);
+
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard,
+          ),
+        );
+      })
+      .catch((error) => console.error(error));
+  }
+  function handleCardDelete(card) {
+    api.deleteCardsApi(card._id).then((removeCard) => {
+      console.log(removeCard);
+      setCards((data) =>
+        data.filter((deleteCard) => deleteCard._id !== card._id),
+      );
+    });
+  }
+
   const newCardPopup = { title: "Nuevo lugar", children: <NewCard /> };
   const editProfilePopup = {
     title: "Editar perfil",
@@ -39,6 +65,7 @@ export default function Main() {
     title: "Estas seguro",
     children: <RemoveCard />,
   };
+
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
     children: <EditAvatar />,
@@ -54,7 +81,11 @@ export default function Main() {
     <main className="content">
       <section className="profile page__section">
         <div className="profile__avatar">
-          <img src={avatarUno} className="profile__image" alt="Avatar" />
+          <img
+            src={currentUser.avatar}
+            className="profile__image"
+            alt="Avatar"
+          />
           <button
             className="profile__imagen-edit"
             onClick={() => handleOpenPopup(editAvatarPopup)}
@@ -63,14 +94,14 @@ export default function Main() {
           </button>
         </div>
         <div className="profile__info">
-          <h1 className="profile__title">Jacques Cousteau</h1>
+          <h1 className="profile__title">{currentUser.name}</h1>
           <button
             aria-label="Editar perfil"
             className="profile__edit-button"
             type="button"
             onClick={() => handleOpenPopup(editProfilePopup)}
           ></button>
-          <p className="profile__description">Explorador</p>
+          <p className="profile__description">{currentUser.about}</p>
         </div>
         <button
           aria-label="Agregar tarjeta"
@@ -86,9 +117,10 @@ export default function Main() {
               key={card._id}
               card={card}
               onOpenPopup={() => handleOpenPopup({ link: card.link })}
-              onCardDelete={() =>
-                handleOpenPopup({ ...deleteCards, id: card.id })
-              }
+              onCardLike={() => handleCardLike(card)}
+              onCardDelete={() => handleCardDelete(card)}
+              // onCardDelete={() =>
+              //   handleOpenPopup({ ...deleteCards, id: card.id })}
             />
           ))}
         </ul>

@@ -1,5 +1,4 @@
-export default function RemoveCard({ title, children, onClose, onConfirm }) {
-  //   const { title, children, onClose } = props;
+export default function RemoveCard({ onConfirm }) {
   return (
     <div className="popup__delete-confimation" id="confirmation__delete">
       <button

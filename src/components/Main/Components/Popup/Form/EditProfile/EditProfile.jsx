@@ -1,39 +1,64 @@
+import { useState, useContext } from "react";
+import { CurrentUserContext } from "../../../../../../Contexst/CurrentUserContext";
+
 export default function EditProfile() {
+  const { currentUser, handleUpdateUser } = useContext(CurrentUserContext); // Obtiene el objeto currentUser
+
+  const [name, setName] = useState(currentUser.name);
+  const [description, setDescription] = useState(currentUser.about);
+  const handleNameChange = (evt) => {
+    setName(evt.target.value); //
+  };
+  console.log(handleNameChange);
+  const handleDescriptionChange = (evt) => {
+    setDescription(evt.target.value);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Evita el comportamiento predeterminado del envío de formularios
+
+    handleUpdateUser({ name, about: description });
+  };
+
   return (
     <form
       className="popup__form"
+      name="profile-form"
       id="edit-profile-form"
-      name="formulario"
       noValidate
+      onSubmit={handleSubmit}
     >
-      <input
-        className="popup__input popup__input_type_name"
-        name="name"
-        id="name"
-        placeholder="Nombre"
-        minLength="2"
-        maxLength="40"
-        type="text"
-        required
-      />
-      <span className="name-input-error popup__input-error">
-        completa este campo
-      </span>
-      <input
-        className="popup__input popup__input_type_description"
-        name="description"
-        id="description"
-        placeholder="Acerca de mí"
-        minLength="2"
-        maxLength="200"
-        required
-        type="text"
-      />
-      <span className="description-input-error popup__input-error">
-        completa este campo
-      </span>
-      <button className="button popup__button" type="submit" disabled>
-        Guardar
+      <label className="popup__label">
+        <input
+          className="popup__input popup__input_type_name"
+          id="owner-name"
+          maxLength="40"
+          minLength="2"
+          name="userName"
+          placeholder="Nombre"
+          required
+          type="text"
+          value={name} // Vincula name con la entrada
+          onChange={handleNameChange} // Agrega el controlador onChange
+        />
+        <span className="popup__error" id="owner-name-error"></span>
+      </label>
+      <label className="popup__label">
+        <input
+          className="popup__input popup__input_type_description"
+          id="owner-description"
+          maxLength="200"
+          minLength="2"
+          name="userDescription"
+          placeholder="Acerca de mí"
+          required
+          type="text"
+          value={description} // Vincula description con la entrada
+          onChange={handleDescriptionChange} // Agrega el controlador onChange
+        />
+        <span className="popup__error" id="owner-description-error"></span>
+      </label>
+      <button className="button popup__button" type="submit">
+        Save
       </button>
     </form>
   );

@@ -1,4 +1,17 @@
+import { useState, useContext } from "react";
+import { CurrentUserContext } from "../../../../../../Contexst/CurrentUserContext";
+
 export default function EditAvatar() {
+  const { currentUser } = useContext(CurrentUserContext);
+  const [avatar, setAvatar] = useState(currentUser.avatar);
+  const handleImgChange = () => {
+    setAvatar(); //
+  };
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    onUpdateAvatar({ avatar: avatar });
+  }
   return (
     <form className="popup__form">
       <input
@@ -8,7 +21,10 @@ export default function EditAvatar() {
         maxlength="200"
         required
         name="avatar"
+        onSubmit={handleSubmit}
         placeholder="URL"
+        value={avatar}
+        onChange={handleImgChange}
       />
       <span className="place-name-input-error popup__input-error">
         completa este campo
