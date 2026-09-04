@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
 import Footer from "./Footer/Footer.jsx";
-import Api from "../Utilis/Api.js";
+import Api from "../utils/Api.js";
 
-import CurrentUserContext from "../Contexst/CurrentUserContext.jsx";
+import CurrentUserContext from "../contexts/CurrentUserContext.jsx";
 
 function App() {
   const api = new Api({
