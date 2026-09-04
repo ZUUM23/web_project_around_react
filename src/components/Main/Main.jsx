@@ -1,6 +1,6 @@
 import avatarUno from "../../images/avatar.jpg";
-import { useContext, useEffect, useState } from "react";
-import CurrentUserContext from "../../contexts/CurrentUserContext.jsx";
+import { useContext, useState } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 import Popup from "./Components/Popup/Popup.jsx";
 import NewCard from "./Components/Popup/Form/NewCard/NewCard.jsx";
 import EditProfile from "./Components/Popup/Form/EditProfile/EditProfile.jsx";
@@ -9,7 +9,6 @@ import Card from "./Components/Card/Card.jsx";
 import RemoveCard from "./Components/Popup/Form/RemoveCard/RemoveCard.jsx";
 import ImagePopup from "./Components/ImagePopup/ImagePopup.jsx";
 import lapizEdit from "../../images/edit-icon.svg";
-import Api from "../../utils/Api.js";
 
 export default function Main() {
   const [popup, setPopup] = useState(null);

@@ -4,7 +4,7 @@ import Main from "./Main/Main.jsx";
 import Footer from "./Footer/Footer.jsx";
 import Api from "../utils/Api.js";
 
-import CurrentUserContext from "../contexts/CurrentUserContext.jsx";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function App() {
   const api = new Api({
