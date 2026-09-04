@@ -1,47 +1,42 @@
-import { Children, useState, useContext } from "react";
+import ImagePopup from "../ImagePopup/ImagePopup.jsx";
 
-export default function Card({ card, onOpenPopup, onCardDelete, onCardLike }) {
-  // const { currentUser, setCurrentUser } = useContext();
-  const { title, link, isLiked, id } = card;
+export default function Card({
+  card,
+  handleOpenPopup,
+  handleCardLike,
+  handleCardDelete,
+}) {
+  const { name, link, isLiked } = card;
 
-  const imageComponent = {
-    title: title,
-    link: link,
+  const imagePopup = {
+    children: <ImagePopup card={card} />,
   };
-  const deleteClick = {
-    id: id,
-  };
+
   const cardLikeButtonClassName = `card__like-button ${
     isLiked ? "card__like-button_is-active" : ""
   }`;
-  const handleLikeClick = () => {
-    onCardLike(card);
-  };
-  const handleDeleteClick = () => {
-    onCardDelete(deleteClick);
-  };
+
   return (
     <li className="card">
       <img
         className="card__image"
         src={link}
-        alt=""
-        onClick={() => onOpenPopup(imageComponent)}
+        alt={name}
+        onClick={() => handleOpenPopup(imagePopup)}
       />
       <button
         aria-label="Delete card"
         className="card__delete-button"
         type="button"
-        onClick={handleDeleteClick}
+        onClick={() => handleCardDelete(card)}
       />
       <div className="card__description">
-        <h2 className="card__title">{title}</h2>
+        <h2 className="card__title">{name}</h2>
         <button
           aria-label="Like card"
           type="button"
           className={cardLikeButtonClassName}
-          // onClick={() => onCardLike(card)}
-          onClick={handleLikeClick}
+          onClick={() => handleCardLike(card)}
         />
       </div>
     </li>

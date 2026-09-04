@@ -1,30 +1,29 @@
-import { useState, useContext } from "react";
-import { CurrentUserContext } from "../../../../../../Contexst/CurrentUserContext";
+import { useState, useContext, useRef } from "react";
+import CurrentUserContext from "../../../../../../Contexst/CurrentUserContext";
 
 export default function EditAvatar() {
-  const { currentUser } = useContext(CurrentUserContext);
-  const [avatar, setAvatar] = useState(currentUser.avatar);
-  const handleImgChange = () => {
-    setAvatar(); //
-  };
+  const { currentUser, onUpdateAvatar } = useContext(CurrentUserContext);
+  const avatar = useRef(null);
+
   function handleSubmit(e) {
     e.preventDefault();
 
-    onUpdateAvatar({ avatar: avatar });
+    onUpdateAvatar({ avatar: avatar.current.value });
   }
   return (
-    <form className="popup__form">
+    <form className="popup__form" onSubmit={handleSubmit}>
       <input
         type="url"
         className="popup__input popup__input_type_card-name"
         minlength="2"
         maxlength="200"
+        ref={avatar}
         required
         name="avatar"
-        onSubmit={handleSubmit}
         placeholder="URL"
-        value={avatar}
-        onChange={handleImgChange}
+
+        // value={avatar}
+        // onChange={handleImgChange}
       />
       <span className="place-name-input-error popup__input-error">
         completa este campo

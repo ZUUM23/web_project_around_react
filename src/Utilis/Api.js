@@ -21,14 +21,14 @@ class Api {
       headers: this._headers,
     }).then(this._checkValidityApi);
   }
-  profileUpdateUser(it3ms) {
+  profileUpdateUser(items) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: this._headers,
 
       body: JSON.stringify({
-        name: it3ms.name,
-        about: it3ms.about,
+        name: items.name,
+        about: items.about,
       }),
     }).then(this._checkValidityApi);
   }

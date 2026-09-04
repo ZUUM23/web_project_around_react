@@ -4,13 +4,9 @@ import Main from "./Main/Main.jsx";
 import Footer from "./Footer/Footer.jsx";
 import Api from "../Utilis/Api.js";
 
-import {
-  CurrentUserContext,
-  CurrentUserProvider,
-} from "../Contexst/CurrentUserContext.jsx";
+import CurrentUserContext from "../Contexst/CurrentUserContext.jsx";
 
 function App() {
-  const { currentUser, setCurrentUser } = useState(CurrentUserContext);
   const api = new Api({
     baseUrl: "https://around-api.es.tripleten-services.com/v1",
     headers: {
@@ -18,43 +14,97 @@ function App() {
       "Content-Type": "application/json",
     },
   });
+  const [currentUser, setCurrentUser] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [popup, setPopup] = useState(null);
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, initialCards]) => {
+        setCurrentUser(userData);
+        setCards(initialCards);
       })
-      .catch((err) => {
-        console.log("vuelve a intentar");
+      .catch((error) => {
+        console.error(error);
       });
-    api.getInitialCards().then((data) => {
-      console.log(data, ":datos");
-
-      setCards(data);
-    });
   }, []);
 
-  const handleUpdateUser = (data) => {
-    (async () => {
-      await api.getUserInfo(data).then((newData) => {
+  function handleOpenPopup(nextPopup) {
+    setPopup(nextPopup);
+  }
+
+  function handleClosePopup() {
+    setPopup(null);
+  }
+
+  function handleUpdateUser(data) {
+    api
+      .profileUpdateUser(data)
+      .then((newData) => {
         setCurrentUser(newData);
-        console.log(data, "datos de handleUpdateUser ");
-      });
-    })();
-  };
-  const handleUpdateAvatar = (dta) => {
+        handleClosePopup();
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleUpdateAvatar(data) {
+    api
+      .updateProfilePicture(data)
+      .then((newData) => {
+        setCurrentUser(newData);
+        handleClosePopup();
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleCardLike(card) {
+    api
+      .changeLikeCardStatus(card._id, !card.isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c)),
+        );
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleCardDelete(card) {
+    api
+      .deleteCardsApi(card._id)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleAddPlaceSubmit(data) {
+    api
+      .addSendLetter(data)
+      .then((newCard) => {
+        setCards((state) => [newCard, ...state]);
+        handleClosePopup();
+      })
+      .catch((error) => console.error(error));
+  }
+
+  const onUpdateAvatar = (dta) => {
     (async () => {
       await api.updateProfilePicture(dta).then((newImg) => {
         setCurrentUser(newImg);
+        console.log(newImg);
       });
     })();
   };
+
   return (
-    <CurrentUserProvider.Provider
+    <CurrentUserContext.Provider
       value={{
         currentUser,
-        setCurrentUser,
+        cards,
         handleUpdateUser,
+        onUpdateAvatar,
+        handleAddPlaceSubmit,
+        handleCardDelete,
+        handleCardLike,
       }}
     >
       <div className="page__content">
@@ -62,7 +112,7 @@ function App() {
         <Main />
         <Footer />
       </div>
-    </CurrentUserProvider.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 export default App;
