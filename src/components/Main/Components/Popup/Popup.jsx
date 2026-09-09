@@ -1,9 +1,9 @@
-export default function Popup({ onClose, title, children }) {
+export default function Popup({ onClose, name, children }) {
   return (
     <div className="popup">
       <div
         className={`popup__content ${
-          !title ? "popup__content_content_image" : ""
+          !name ? "popup__content_content_image" : ""
         }`}
       >
         <button
@@ -12,7 +12,7 @@ export default function Popup({ onClose, title, children }) {
           type="button"
           onClick={onClose}
         />
-        {title && <h3 className="popup__title">{title}</h3>}
+        {name && <h3 className="popup__title">{name}</h3>}
         {children}
       </div>
     </div>

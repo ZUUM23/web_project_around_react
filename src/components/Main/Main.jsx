@@ -11,10 +11,14 @@ import ImagePopup from "./Components/ImagePopup/ImagePopup.jsx";
 import lapizEdit from "../../images/edit-icon.svg";
 
 export default function Main() {
-  const [popup, setPopup] = useState(null);
-
-  const { currentUser, handleCardLike, cards, handleCardDelete } =
-    useContext(CurrentUserContext);
+  const {
+    currentUser,
+    handleCardLike,
+    cards,
+    handleCardDelete,
+    popup,
+    setPopup,
+  } = useContext(CurrentUserContext);
 
   const newCardPopup = { name: "Nuevo lugar", children: <NewCard /> };
   const editProfilePopup = {
@@ -85,7 +89,7 @@ export default function Main() {
       </section>
 
       {popup && (
-        <Popup onClose={handleClosePopup} title={popup.title}>
+        <Popup onClose={handleClosePopup} name={popup.name}>
           {popup.children}
         </Popup>
       )}

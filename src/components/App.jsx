@@ -46,16 +46,6 @@ function App() {
       .catch((error) => console.error(error));
   }
 
-  function handleUpdateAvatar(data) {
-    api
-      .updateProfilePicture(data)
-      .then((newData) => {
-        setCurrentUser(newData);
-        handleClosePopup();
-      })
-      .catch((error) => console.error(error));
-  }
-
   function handleCardLike(card) {
     api
       .changeLikeCardStatus(card._id, !card.isLiked)
@@ -90,6 +80,7 @@ function App() {
     (async () => {
       await api.updateProfilePicture(dta).then((newImg) => {
         setCurrentUser(newImg);
+        handleClosePopup();
         console.log(newImg);
       });
     })();
@@ -105,6 +96,8 @@ function App() {
         handleAddPlaceSubmit,
         handleCardDelete,
         handleCardLike,
+        popup,
+        setPopup,
       }}
     >
       <div className="page__content">

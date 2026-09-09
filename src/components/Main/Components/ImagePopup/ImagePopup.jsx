@@ -1,11 +1,11 @@
 export default function ImagePopup({ card, onClose }) {
-  const { title, link } = card;
+  const { name, link } = card;
 
   return (
     <div className="popup">
       <div
         className={`popup__content ${
-          !title ? "popup__content_content_image" : ""
+          !name ? "popup__content_content_image" : ""
         }`}
       >
         <button
@@ -15,7 +15,7 @@ export default function ImagePopup({ card, onClose }) {
           onClick={onClose}
         />
         <img className="popup__image" src={link} alt="imagen ampliada"></img>
-        {title && <h3 className="popup__title">{title}</h3>}
+        {name && <h3 className="popup__title">{name}</h3>}
       </div>
     </div>
   );
