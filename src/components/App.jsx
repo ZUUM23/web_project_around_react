@@ -2,18 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import Header from "./Header/Header.jsx";
 import Main from "./Main/Main.jsx";
 import Footer from "./Footer/Footer.jsx";
-import Api from "../utils/Api.js";
-
+// import Api from "../utils/Api.js";
+import api from ".././utils/Api.js";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function App() {
-  const api = new Api({
-    baseUrl: "https://around-api.es.tripleten-services.com/v1",
-    headers: {
-      authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
-      "Content-Type": "application/json",
-    },
-  });
+  // const api = new Api({
+  //   baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  //   headers: {
+  //     authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
+  //     "Content-Type": "application/json",
+  //   },
+  // });
   const [currentUser, setCurrentUser] = useState(null);
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);

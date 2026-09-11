@@ -3,6 +3,7 @@ class Api {
     this._baseUrl = options.baseUrl;
     this._headers = options.headers;
   }
+
   _checkValidityApi(res) {
     if (res.ok) {
       return res.json();
@@ -82,4 +83,12 @@ class Api {
     }).then(this._checkValidityApi);
   }
 }
-export default Api;
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
+    "Content-Type": "application/json",
+  },
+});
+
+export default api;
